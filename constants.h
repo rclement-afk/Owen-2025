@@ -8,9 +8,15 @@
 #define turn 650001//this is a garbage variable used to make the god function work
 #define forward 5318008
 
-
-// left motor = black wire toward screen
-// right motor = red toward screen
+struct {
+    int lifter,turret,front,claws,wrist;
+}static const components ={
+    .lifter=0,
+    .turret=0,
+    .front=0,
+    .claws=0,
+    .wrist=0,
+};
 
 struct {
     int rm,lm; 
@@ -36,16 +42,18 @@ struct {
 };
 
 struct {
-    int left, right,et;
+    int left, right, backright, backleft,et;
     int black, white, midpoint, lmidpoint, rmidpoint;
 }static const irs = {
     .left  = 2,
     .right = 0,
-    .black = 3000,
+    .backright = 4,
+    .backleft = 3,
+    .black = 2990,
     .white = 340,
-    .midpoint =3000,
-    .lmidpoint = 3170,
-    .rmidpoint =3000,
+    .midpoint =1500,
+    .lmidpoint = 1800,
+    .rmidpoint =1800,
     .et = 5,
 };
 
@@ -66,10 +74,13 @@ struct {
 struct {
     int min[4], max[4];
 }static const servos = {
-    .min = {1307,	480,	760,	2048},//calibrate servo on ground 1800
-    .max = {2048,	2047,	2048,	0}
+    .min = {1038,	756,	0,	0},//calibrate servo on ground 1800
+    .max = {1653,	2047,	2047,	2047}
 }; //ports:	 ^0		 ^1		 ^2		 ^3	
-//port 1 = drawer controller
+//port 0 = arm
+//port 1 = turret
+//port 2 = claw
+//port 3 = rotate
 
 struct {
     int et, light, slider;
@@ -192,7 +203,8 @@ extern int clicker;
 // These are new and came from run.h
 extern const int claw;
 extern const int arm;
-
+extern const int turret;
+extern const int rotate;
 void Drive(int target_mav_speed, double inches);
 extern double bias1;
 void tick_turn(double degr);
@@ -206,6 +218,9 @@ void four_turn(double degrees);
 int turn_numbertwo();
 int follow_object();
 int rotate_object();
+void pickup_cup();
+void slide_cup();
+void back_until_black();
 #endif
 
 

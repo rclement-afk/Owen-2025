@@ -15,7 +15,7 @@ double temp_bias =9.20;
 // Current value is calibrated for speed 1000
 //original ratio was 890
 #define locolib_gyro_turn_degree_theta_ratio 900
-#define locolib_gyro_turn_speed 1000
+#define locolib_gyro_turn_speed 1350
 #define locolib_demobot_wheel_width 7.8
 
 
@@ -268,7 +268,7 @@ double new_calibrate_z(){
 
 }
 void drive_ET(int measure, int speed){
-   /* FILE *file3 = fopen ("BIAS.txt","r");
+    /* FILE *file3 = fopen ("BIAS.txt","r");
     char line[16];
     while(fgets(line, sizeof(line),file3))
 
@@ -277,10 +277,10 @@ void drive_ET(int measure, int speed){
     double bias_placeholder=atof(line);
     printf("  %f as a decimal BIAS", bias_placeholder);
 */
-double  bias_placeholder =temp_bias;
+    double  bias_placeholder =temp_bias;
     int left_motor =motors.left;
     int right_motor =motors.right;
-  /*  FILE *file999 = fopen("LeftMotor.txt","r"); // left motor definition 
+    /*  FILE *file999 = fopen("LeftMotor.txt","r"); // left motor definition 
     char line1[16];
     while(fgets(line, sizeof(line1),file999))
 
@@ -346,7 +346,7 @@ double  bias_placeholder =temp_bias;
             mav(left_motor,-1 * speed - theta * .0001);
             mav(right_motor,-1 * speed + theta * .0001);
 
-           // mav(backleft_motor, -1*speed - .0001 * theta );
+            // mav(backleft_motor, -1*speed - .0001 * theta );
             //mav(backright_motor, -1*speed + .0001 * theta);
 
             theta += 2*(gyro_z()-bias_placeholder);
@@ -360,7 +360,7 @@ double  bias_placeholder =temp_bias;
             mav(left_motor, speed - .0001 * theta );
             mav(right_motor, speed + .0001 * theta);
 
-           // mav(backleft_motor, speed - .0001 * theta );
+            // mav(backleft_motor, speed - .0001 * theta );
             //mav(backright_motor, speed + .0001 * theta);
 
             theta += 2*(gyro_z()-bias_placeholder);
@@ -376,7 +376,7 @@ double  bias_placeholder =temp_bias;
 }
 void turn1(int degrees)
 {
-/*
+    /*
     FILE *file69= fopen ("BIAS.txt","r");	// bias definition
     char line[16];
     while(fgets(line, sizeof(line),file69))
@@ -385,7 +385,7 @@ void turn1(int degrees)
     fclose(file69);
     double bias_placeholder=atof(line);
     printf("  %f as a decimal BIAS", bias_placeholder);*/
-double bias_placeholder =8.5;
+    double bias_placeholder =8.5;
     int left_motor =motors.left;
     int right_motor =motors.right;
     /*
@@ -436,7 +436,7 @@ double bias_placeholder =8.5;
             mav(left_motor,(speed*-1));
             mav(right_motor,speed);
             theta += gyro_z() - bias_placeholder;
-             printf("%f is current theta\n",theta);
+            printf("%f is current theta\n",theta);
         }
     }
     printf(" theta: %.6f ", theta*.181812);
@@ -990,7 +990,7 @@ void demo_gyro_square_up(int speed)
 
     int theta=0; //sign_speed = sign(speed);
     //
-   /* FILE *file11= fopen ("ITL.txt","r");
+    /* FILE *file11= fopen ("ITL.txt","r");
     if (file11==NULL){
         perror("Error opening file");
         return EXIT_FAILURE;}
@@ -999,10 +999,10 @@ void demo_gyro_square_up(int speed)
     {printf("%s is ITL", line);}
     fclose(file11);
     double itr1=atof(line);
-    
+
     int itl = itr1-0;*/
-    int itl = 1;
-        int itr = 0;/*
+    int itl = 2;
+    int itr = 0;/*
     printf("  %d port for ITL", itl);
     //
     FILE *file13= fopen ("ITR.txt","r");
@@ -1016,7 +1016,7 @@ void demo_gyro_square_up(int speed)
     double it1=atof(line0);
     int itr = it1-0;
     printf("  %d port for ITR", itr);*/
-/*
+    /*
     FILE * file14 = fopen("rmidpoint", "r"); 
     if (file14==NULL){
         perror("Error opening file");
@@ -1037,11 +1037,11 @@ void demo_gyro_square_up(int speed)
     fclose(file16);
     int lmidpoint=atof(line5);*/
     int lmidpoint = 1700;
-        int rmidpoint =1700;
+    int rmidpoint =1700;
     //
     //int right_invert = ron_black(itr);
     // int left_invert = lon_black(itl);
-/*
+    /*
     FILE *file999 = fopen("LeftMotor.txt","r"); // left motor definition 
     if (file999==NULL){
         perror("Error opening file");
@@ -1096,10 +1096,11 @@ void demo_gyro_square_up(int speed)
 
     printf(" %d ", backleft_motor);*/
     //replace these numbers with file pull
-int left_motor=0; //DON'T TOUCH
-   int right_motor=3; //DON'T TOUCH
-    int backleft_motor=1; //DON'T TOUCH
-    int backright_motor=2; //DON'T TOUCH
+    int left_motor=motors.left; //DON'T TOUCH
+    int right_motor=motors.right; //DON'T TOUCH
+    int backleft_motor=motors.backleft; //DON'T TOUCH
+    int backright_motor=motors.backright; //DON'T TOUCH
+
 
 
     // Gyro drive till any hit black
@@ -1108,36 +1109,62 @@ int left_motor=0; //DON'T TOUCH
         if(speed > 0){
             mav(left_motor, (speed - 0.1*(speed * (theta *.0005))));            
             mav(right_motor, (speed + 0.1*(speed * theta *.0005)));
-            //mav(backleft_motor, speed);            
-            // mav(backright_motor,speed);
+
             mav(backleft_motor, (speed - 0.1*(speed * (theta *.0005))));            
             mav(backright_motor, (speed + 0.1*(speed * theta *.0005)));
+
         }
 
 
         else{
-            mav(left_motor, (speed + 0.1*(speed * (theta *.0005))));            
-            mav(right_motor, (speed - 0.1*(speed * theta *.0005)));
-            //mav(backleft_motor, speed);            
-            // mav(backright_motor,speed);
-            mav(backleft_motor, (speed + 0.1*(speed * (theta *.0005))));            
-            mav(backright_motor, (speed - 0.1*(speed * theta *.0005)));
+            mav(left_motor, (speed - 0.1*(speed * (theta *.0005))));            
+            mav(right_motor, (speed + 0.1*(speed * theta *.0005)));
+
+            mav(backleft_motor, (speed - 0.1*(speed * (theta *.0005))));            
+            mav(backright_motor, (speed + 0.1*(speed * theta *.0005)));
 
         }
 
         msleep(10);
-        theta += (gyro_z() - 2) * 10;//this is a bias number that must be changed
+        theta += (gyro_z() - 8.25) ;
     }
-    
+
     printf("black hit\n");
     while(analog(itl)>lmidpoint || analog(itr)>rmidpoint)
     {
-        if(analog(itl)>lmidpoint) {mav(left_motor, -.25*speed); mav(backleft_motor,  -.25*speed);} 
-        else {mav(left_motor, speed*.5); mav(backleft_motor,  speed);}
+        if(analog(itl) > lmidpoint)
+        {
+            printf("\n left hit");
+            mav(left_motor, -.25*speed);
+            mav(backleft_motor,  -.25*speed);
+        } 
+        else 
+        {
+            mav(left_motor, speed*.5); 
+            mav(backleft_motor,  speed *.5);
+        }
 
-        if(analog(itr)>rmidpoint) {mav(right_motor,  -.25*speed); mav(backright_motor,  -.25*speed);}
-        else {mav(right_motor, speed*.5); mav(backright_motor,  speed*.5);}
-        msleep(2);
+        if(analog(itr)>rmidpoint) 
+        {
+
+            printf("\n right hit");
+            mav(right_motor,  -.25*speed);
+            mav(backright_motor,  -.25*speed);
+        }
+        else 
+        {
+            mav(right_motor, speed*.5); 
+            mav(backright_motor,  speed*.5);}
+
+
+
+        if(analog(itl) < lmidpoint && analog(itr) < rmidpoint)
+        {
+
+            break;
+        }
+        msleep(10);
+
     }
 
     // Align sensors with line
@@ -1147,11 +1174,11 @@ int left_motor=0; //DON'T TOUCH
     freeze(right_motor);
     freeze(backleft_motor);
     freeze(backright_motor);
-
+    msleep(30);
     printf("squared up: %ums\n", milliseconds());
 
 
-    msleep(10);
+    // msleep(10);
 }
 
 
@@ -1163,8 +1190,10 @@ int left_motor=0; //DON'T TOUCH
 
 //this is what came from run.c
 int clicker = 0;
-const int claw = 0;
-const int arm = 1;
+const int claw = 3;
+const int arm = 0;
+const int turret = 1;
+const int rotate =2;
 int thatclicker = 1;
 
 
@@ -1447,13 +1476,13 @@ void Drive(int target_mav_speed,double inches)
 
 void four_wheel_drive(int target_mav_speed, double inches)
 {
-    int left_average=motors.l_average;
-   /* FILE * file969= fopen("l_average", "r"); 
+   // int left_average=motors.l_average;
+    /* FILE * file969= fopen("l_average", "r"); 
     if (file969==NULL){
         perror("Error opening file");
         return EXIT_FAILURE;
     }
-    
+
     char line6[16];
     while(fgets(line6, sizeof(line6),file969))
 
@@ -1465,12 +1494,12 @@ void four_wheel_drive(int target_mav_speed, double inches)
     */
 
     //working here
-   /*
+    /*
     FILE * file970= fopen("r_average", "r"); 
     if (file970==NULL){
         perror("Error opening file");
         return EXIT_FAILURE;}
-    
+
     char line7[16];
     while(fgets(line7, sizeof(line7),file970))
 
@@ -1484,7 +1513,7 @@ void four_wheel_drive(int target_mav_speed, double inches)
 
 
 
-   /* FILE *file69= fopen ("BIAS.txt","r");	// bias definition
+    /* FILE *file69= fopen ("BIAS.txt","r");	// bias definition
     if (file69==NULL){
         perror("Error opening file");
         return EXIT_FAILURE;}
@@ -1495,9 +1524,9 @@ void four_wheel_drive(int target_mav_speed, double inches)
     fclose(file69);
     double bias_placeholder=atof(line);
     printf("  %f as a decimal BIAS\n", bias_placeholder);*/
-double bias_placeholder=8.5;
+    double bias_placeholder=8.5;
 
-   /* FILE *file999 = fopen("LeftMotor.txt","r"); // left motor definition 
+    /* FILE *file999 = fopen("LeftMotor.txt","r"); // left motor definition 
     if (file999==NULL){
         perror("Error opening file");
         return EXIT_FAILURE;}
@@ -1559,8 +1588,8 @@ double bias_placeholder=8.5;
     printf(" new new bias %f ", bias2);
 
 
-int left_motor=motors.left; //DON'T TOUCH
-   int right_motor=motors.right; //DON'T TOUCH
+    int left_motor=motors.left; //DON'T TOUCH
+    int right_motor=motors.right; //DON'T TOUCH
     int backleft_motor=motors.backleft; //DON'T TOUCH
     int backright_motor=motors.backright; //DON'T TOUCH
 
@@ -1569,14 +1598,14 @@ int left_motor=motors.left; //DON'T TOUCH
     //double inches = abs(inches);
     //double duration_sec = fabs(duration_sec);
     int sign_speed = sign(target_mav_speed);
-    double start_sec = seconds();
-    double accel_duration_sec = abs(target_mav_speed)*0.0003;
+   // double start_sec = seconds();
+   // double accel_duration_sec = abs(target_mav_speed)*0.0003;
     int ticks_left = inches * right_average;
 
     int run_speed = 0 ;
     double theta = 0.00;
     ticks_left = ticks_left*.979; // magic coefficient
-   
+
 
     if(target_mav_speed<0 || inches<0)//backward movement DON'T TOUCH
     {	//DON'T TOUCH
@@ -1645,7 +1674,7 @@ int left_motor=motors.left; //DON'T TOUCH
             ///
         }///
         printf("entering deceleration");///
-         while(gmpc(left_motor)< (ticks_left-10)) //decellerate///
+        while(gmpc(left_motor)< (ticks_left-10)) //decellerate///
         {///
             run_speed = 19.16*(ticks_left-gmpc(left_motor))+70;///
             mav(left_motor, run_speed - run_speed*theta*sign_speed* .0001);///
@@ -1655,7 +1684,7 @@ int left_motor=motors.left; //DON'T TOUCH
             msleep(5);///
             theta += (gyro_z()-bias_placeholder)*2;///
         }///
-        
+
         motor(right_motor, 0);///
         motor(left_motor, 0);///
         motor(backright_motor, 0);///
@@ -1674,7 +1703,7 @@ void omni_strafe(double degrees,double inches)
     cmpc(2);
     cmpc(3);
     msleep(100);
-
+    /*
 
     FILE * file969= fopen("l_average", "r"); 
     char line6[16];
@@ -1682,11 +1711,11 @@ void omni_strafe(double degrees,double inches)
 
 
     {printf("%s is left_motor_average", line6);}
-    fclose(file969);
-    int left_average=atof(line6);
-    printf("  %d as a decimal ", left_average);
+    fclose(file969);*/
+    //int left_average=motors.l_average;
+    /*printf("  %d as a decimal ", left_average);
 
-   // printf("hiiiiiiiiiii");
+    // printf("hiiiiiiiiiii");
 
     FILE * file970= fopen("r_average", "r"); 
     char line7[16];
@@ -1694,27 +1723,27 @@ void omni_strafe(double degrees,double inches)
 
 
     {printf("%s is right_motor_average", line7);}
-    fclose(file970);
-    int right_average=atof(line7);
-    printf("  %d as a decimal", right_average);
+    fclose(file970);*/
+    int right_average=motors.r_average;
+    /* printf("  %d as a decimal", right_average);
 
 
 
 
-    printf(" before if /n");
+    printf(" before if /n");*/
     int ticks_left = inches * right_average;
     ticks_left = ticks_left * .979;
 
-    FILE *file10 = fopen ("BIAS.txt","r");
-    char line[16];
+   // FILE *file10 = fopen ("BIAS.txt","r");
+    //char line[16];
     inches = inches *.5;
-    while(fgets(line, sizeof(line),file10))
+    /* while(fgets(line, sizeof(line),file10))
 
 
     {printf("%s is BIAS", line);}
-    fclose(file10);
-    double bias_placeholder=atof(line);
-    printf("  %f as a decimal BIAS", bias_placeholder);
+    fclose(file10);*/
+    double bias_placeholder=temp_bias;
+    /*printf("  %f as a decimal BIAS", bias_placeholder);
 
     FILE *file999 = fopen("LeftMotor1.txt","r"); // left motor definition 
     char line1[16];
@@ -1722,8 +1751,9 @@ void omni_strafe(double degrees,double inches)
 
     {printf("%s is Left Motor\n", line1);}
     fclose(file999);
-    int left_motor=atof(line1);
-
+   */
+    int left_motor=motors.left;
+    /*
 
     printf(" Left Motor: %d ", left_motor);
 
@@ -1732,10 +1762,10 @@ void omni_strafe(double degrees,double inches)
     while(fgets(line2, sizeof(line2),file998))
 
     {printf("%s is Right Motor\n", line2);}
-    fclose(file998);
-    double right_motor1=atof(line2);
+    fclose(file998);*/
+    double right_motor1=motors.right;
     int right_motor = right_motor1 + 0;
-
+    /*
     printf(" %d ", right_motor);
 
     FILE *file992 = fopen("BackRightMotor.txt","r"); // left motor definition 
@@ -1743,10 +1773,10 @@ void omni_strafe(double degrees,double inches)
     while(fgets(line3, sizeof(line3),file992))
 
     {printf("%s is back Right Motor\n", line3);}
-    fclose(file992);
-    double backright_motor1=atof(line3);
+    fclose(file992);*/
+    double backright_motor1=motors.backright;
     int backright_motor = backright_motor1 + 0;
-
+    /*
     printf(" %d ", backright_motor);
 
     FILE *file993 = fopen("BackLeftMotor.txt","r"); // left motor definition 
@@ -1754,11 +1784,11 @@ void omni_strafe(double degrees,double inches)
     while(fgets(line4, sizeof(line4),file993))
 
     {printf("%s is back left Motor\n", line4);}
-    fclose(file993);
-    double backleft_motor1=atof(line4);
+    fclose(file993);*/
+    double backleft_motor1=motors.backleft;
     int backleft_motor = backleft_motor1 + 0;
 
-    printf(" %d ", backleft_motor);
+    //printf(" %d ", backleft_motor);
 
     double theta = 0;
     theta = 2*(gyro_x() - bias_placeholder);
@@ -1908,7 +1938,7 @@ void omni_strafe(double degrees,double inches)
 void four_turn(double degrees)
 {
     int left_motor=motors.left; //DON'T TOUCH
-   int right_motor=motors.right; //DON'T TOUCH
+    int right_motor=motors.right; //DON'T TOUCH
     int backleft_motor=motors.backleft; //DON'T TOUCH
     int backright_motor=motors.backright; //DON'T TOUCH
     double bias_placeholder=8.3;
@@ -1925,9 +1955,9 @@ void four_turn(double degrees)
 
     if(degrees > 0)
     {
-        while(theta < target_theta*.69 )//magic coefficient
+        while(theta < target_theta*.67 )//magic coefficient
         {
-            printf("\n Theta: %f ", theta);
+            
             msleep(10);
             mav(left_motor, speed);
             mav(right_motor, (speed*-1));
@@ -1963,3 +1993,95 @@ void four_turn(double degrees)
             smart_servo(turret,normal,1.2);
         }
 */
+void pickup_cup()
+{
+    smart_servo(arm,80,.50);
+    smart_servo(claw,0,0.5);
+    smart_servo(rotate,50,0.5);
+    demo_gyro_square_up(1200);
+
+    msleep(500);
+    smart_servo(arm,30,1.3);
+    four_wheel_drive(500,-1.0);
+
+    msleep(200);
+    smart_servo(claw,100,0.5);
+    msleep(500);
+    smart_servo(arm,85,1.0);
+    msleep(2000);
+    smart_servo(arm,80,1.0);
+    four_wheel_drive(1000,-2.0);
+    smart_servo(rotate,65,0.5);
+    four_turn(-30);
+
+    smart_servo(arm,30,1.3);
+    smart_servo(claw,0,0.5);
+    msleep(1300);
+    smart_servo(arm,80,1.5);
+    msleep(2000);
+
+
+}
+void slide_cup()
+{
+    smart_servo(arm,70,1.3);
+    smart_servo(rotate,2,0.5);
+    demo_gyro_square_up(1200);
+
+
+    four_wheel_drive(1500,15);
+    smart_servo(arm,34,1.3);
+    omni_strafe(-90,3.0);
+    //msleep(1000);
+    smart_servo(rotate,50,0.5);
+    smart_servo(arm,5,1.3);
+    four_turn(90);
+    omni_strafe(-90,5.0);
+    while(irs.right<irs.rmidpoint){
+        omni_strafe(-90,.5);
+
+
+    }
+
+    /*
+    //msleep(1000);
+    four_wheel_drive(1100,1);
+    msleep(1000);
+    four_turn(45);
+    */
+
+
+
+    /*four_wheel_drive(1500,3);
+    four_turn(90);
+     smart_servo(turret,100,1.0);
+    smart_servo(arm,40,1.3);
+    smart_servo(rotate,2,0.5);
+     smart_servo(claw,0,0.5);
+demo_gyro_square_up(1200);
+ four_wheel_drive(1500,6);
+     four_turn(-90);*/
+
+}
+void back_until_black()
+{
+    int theta =0;
+     int left_motor=motors.left; //DON'T TOUCH
+    int right_motor=motors.right; //DON'T TOUCH
+    int backleft_motor=motors.backleft; //DON'T TOUCH
+    int backright_motor=motors.backright; //DON'T TOUCH
+    int bias_placeholder = 8.5;
+    while(analog(irs.backright)< 2500 && analog(irs.backleft)<2500)
+    {
+    mav(left_motor, -1200 + (-1200)*theta*0.0001); //DON'T TOUCH
+    mav(right_motor,-1200 -(-1200)*theta*0.0001); //DON'T TOUCH
+    mav(backleft_motor, -1200 + (-1200)* theta *.0001); //DON'T TOUCH
+    mav(backright_motor,-1200 - (-1200) *theta *.0001); //DON'T TOUCH
+    msleep(10); //
+    theta += (gyro_z()-bias_placeholder) ;
+    }
+    mav(left_motor, 0); //DON'T TOUCH
+    mav(right_motor,0); //DON'T TOUCH
+    mav(backleft_motor,0); //DON'T TOUCH
+    mav(backright_motor,0);
+}
